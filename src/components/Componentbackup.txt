@@ -1,0 +1,177 @@
+import React, { useState } from 'react';
+
+const ComponentPalette = ({ onComponentDrop }) => {
+    const [components] = useState({
+        headers: [
+            {
+                id: 'header1',
+                type: 'Simple Header',
+                template: `<header class="navbar bg-base-100"><div class="flex-1"><a class="btn btn-ghost text-xl">Logo</a></div></header>`
+            },
+            {
+                id: 'header2',
+                type: 'Nav Header',
+                template: `<header class="navbar bg-base-100"><div class="flex-1"><a class="btn btn-ghost text-xl">Logo</a><nav><ul class="menu menu-horizontal px-1"><li><a>Home</a></li><li><a>About</a></li></ul></nav></div></header>`
+            },
+            {
+                id: 'header3',
+                type: 'Search Header',
+                template: `<header class="navbar bg-base-100"><div class="flex-1"><a class="btn btn-ghost text-xl">Logo</a></div><div class="flex-none gap-2"><div class="form-control"><input type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto"/></div></div></header>`
+            },
+            {
+                id: 'header4',
+                type: 'Dropdown Header',
+                template: `<header class="navbar bg-base-100"><div class="dropdown"><div tabindex="0" role="button" class="btn btn-ghost lg:hidden"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"/></svg></div></div></header>`
+            },
+            {
+                id: 'header5',
+                type: 'Centered Header',
+                template: `<header class="navbar bg-base-100 justify-center"><div class="flex-1 justify-center"><a class="btn btn-ghost text-xl">Centered Logo</a></div></header>`
+            }
+        ],
+        heroes: [
+            {
+                id: 'hero1',
+                type: 'Simple Hero',
+                template: `<div class="hero min-h-[400px] bg-base-200"><div class="hero-content text-center"><h1 class="text-5xl font-bold">Welcome</h1></div></div>`
+            },
+            {
+                id: 'hero2',
+                type: 'Image Hero',
+                template: `<div class="hero min-h-[400px]" style="background-image: url(https://placeholder.com/800x400);"><div class="hero-overlay bg-opacity-60"></div></div>`
+            },
+            {
+                id: 'hero3',
+                type: 'CTA Hero',
+                template: `<div class="hero min-h-[400px] bg-base-200"><div class="hero-content"><div class="max-w-md"><h1 class="text-5xl font-bold">Hello there</h1><p class="py-6">Get Started Now</p><button class="btn btn-primary">Get Started</button></div></div></div>`
+            },
+            {
+                id: 'hero4',
+                type: 'Split Hero',
+                template: `<div class="hero min-h-[400px] bg-base-200"><div class="hero-content flex-col lg:flex-row"><div><h1 class="text-5xl font-bold">Left Content</h1></div><div><p>Right Content</p></div></div></div>`
+            },
+            {
+                id: 'hero5',
+                type: 'Video Hero',
+                template: `<div class="hero min-h-[400px] bg-base-200"><div class="hero-content"><div class="w-full max-w-md"><div class="aspect-video bg-gray-700">Video Placeholder</div></div></div></div>`
+            }
+        ],
+        body: [
+            {
+                id: 'body1',
+                type: 'Features Grid',
+                template: `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">Feature Cards</div>`
+            },
+            {
+                id: 'body2',
+                type: 'Pricing Table',
+                template: `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">Pricing Cards</div>`
+            },
+            {
+                id: 'body3',
+                type: 'Team Section',
+                template: `<div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">Team Members</div>`
+            },
+            {
+                id: 'body4',
+                type: 'Timeline',
+                template: `<div class="container mx-auto p-4"><ul class="timeline">Timeline Items</ul></div>`
+            },
+            {
+                id: 'body5',
+                type: 'Gallery',
+                template: `<div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">Gallery Items</div>`
+            }
+        ],
+        contact: [
+            {
+                id: 'contact1',
+                type: 'Simple Form',
+                template: `<div class="card w-96 bg-base-100 shadow-xl"><div class="card-body"><h2>Contact Us</h2><form>Basic Form</form></div></div>`
+            },
+            {
+                id: 'contact2',
+                type: 'Split Contact',
+                template: `<div class="flex flex-col md:flex-row gap-4">Contact Form + Info</div>`
+            },
+            {
+                id: 'contact3',
+                type: 'Map Contact',
+                template: `<div class="grid grid-cols-1 md:grid-cols-2">Form + Map</div>`
+            },
+            {
+                id: 'contact4',
+                type: 'Office Locations',
+                template: `<div class="grid grid-cols-1 md:grid-cols-3 gap-4">Location Cards</div>`
+            },
+            {
+                id: 'contact5',
+                type: 'Support Contact',
+                template: `<div class="card w-96 bg-base-100"><div class="card-body">Support Form</div></div>`
+            }
+        ],
+        footers: [
+            {
+                id: 'footer1',
+                type: 'Simple Footer',
+                template: `<footer class="footer p-10 bg-neutral text-neutral-content">Simple Footer</footer>`
+            },
+            {
+                id: 'footer2',
+                type: 'Multi Column',
+                template: `<footer class="footer p-10 bg-base-200 text-base-content">Multiple Columns</footer>`
+            },
+            {
+                id: 'footer3',
+                type: 'Social Footer',
+                template: `<footer class="footer items-center p-4 bg-neutral text-neutral-content">Social Links</footer>`
+            },
+            {
+                id: 'footer4',
+                type: 'Newsletter Footer',
+                template: `<footer class="footer p-10 bg-base-200">Newsletter Signup</footer>`
+            },
+            {
+                id: 'footer5',
+                type: 'Company Footer',
+                template: `<footer class="footer footer-center p-10 bg-base-200">Company Info</footer>`
+            }
+        ]
+    });
+
+    const handleDragStart = (e, component) => {
+        e.dataTransfer.setData('component', JSON.stringify(component));
+        onComponentDrop(component);
+    };
+    // const handleComponentClick = (component) => {
+    //     onComponentDrop(component);
+    // };
+    return (
+        <div className="p-4 space-y-8">
+            {Object.entries(components).map(([category, items]) => (
+                <div key={category} className="space-y-4">
+                <h3 className="text-lg font-bold capitalize sticky top-0 bg-base-200 py-2">
+                    {category}
+                </h3>
+                <div className="flex space-x-4 overflow-x-auto pb-4">
+                    {items.map((comp) => (
+                        <div
+                            key={comp.id}
+                            className="p-4 border rounded-lg cursor-move bg-base-100 hover:bg-base-200 
+                                     transition-all hover:shadow-lg hover:-translate-y-1 min-w-[200px]"
+                            draggable
+                            onDragStart={(e) => handleDragStart(e, comp)}
+                           
+                        >
+                            <div className="font-medium mb-2">{comp.type}</div>
+                            <div className="text-sm opacity-70">Click to add or drag</div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            ))}
+        </div>
+    );
+};
+
+export default ComponentPalette;

@@ -1,0 +1,84 @@
+
+import React from 'react';
+
+const CustomizationPanel = ({ component, onComponentEdit, onDelete,onEdit }) => {
+    const handleColorChange = (e) => {
+        onComponentEdit(component.id, { style: { color: e.target.value } });
+    };
+
+    return (
+        // <div className="p-4">
+        //     <div className="flex justify-between items-center mb-4">
+        //         <h3 className="text-lg font-bold">Edit Component</h3>
+        //         <button 
+        //             onClick={onDelete}
+        //             className="btn btn-error btn-sm"
+        //         >
+        //             Delete
+        //         </button>
+        //     </div>
+        //     <div className="space-y-4">
+        //         <div>
+        //             <label className="block font-semibold mb-2">Text Color</label>
+        //             <input
+        //                 type="color"
+        //                 className="w-full"
+        //                 onChange={handleColorChange}
+        //             />
+        //         </div>
+        //     </div>
+        // </div>
+        <div className="p-4 space-y-4">
+            <div className="flex justify-between items-center">
+                <h3 className="text-lg font-bold">Edit {component.type}</h3>
+                <button 
+                    onClick={() => onDelete(component.id)}
+                    className="btn btn-error btn-sm"
+                >
+                    Delete
+                </button>
+            </div>
+
+            <div className="space-y-4">
+                {/* Text Color */}
+                <div>
+                    <label className="block font-semibold mb-2">Text Color</label>
+                    <input
+                        type="color"
+                        className="w-full h-10"
+                        onChange={(e) => onEdit(component.id, { color: e.target.value })}
+                        value={component.styles?.color || '#000000'}
+                    />
+                </div>
+
+                {/* Background Color */}
+                <div>
+                    <label className="block font-semibold mb-2">Background Color</label>
+                    <input
+                    type="color"
+                    className="w-full h-10"
+                    onChange={(e) => onEdit(component.id, { backgroundColor: e.target.value })}
+                    value={component.styles?.backgroundColor || '#ffffff'}
+                />
+            </div>
+
+            {/* Font Size */}
+            <div>
+                    <label className="block font-semibold mb-2">
+                        Font Size: {component.styles?.fontSize || '16px'}
+                    </label>
+                    <input
+                        type="range"
+                        min="12"
+                        max="72"
+                        className="w-full"
+                        onChange={(e) => onEdit(component.id, { fontSize: `${e.target.value}px` })}
+                        value={parseInt(component.styles?.fontSize) || 16}
+                    />
+                </div>
+        </div>
+    </div>
+    );
+};
+
+export default CustomizationPanel;

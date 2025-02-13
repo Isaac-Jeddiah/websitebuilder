@@ -5,10 +5,18 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "cra-template": "1.2.0",
+    "dnd-core": "^16.0.1",
+    "framer-motion": "^12.4.1",
     "lucide-react": "^0.469.0",
     "one": "file:",
     "react": "^19.0.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^19.0.0",
+    "react-draggable": "^4.4.6",
+    "react-dropzone": "^14.3.5",
+    "react-rnd": "^10.4.14",
     "react-router-dom": "^7.1.1",
     "react-scripts": "5.0.1",
     "tailwind-merge": "^2.6.0"

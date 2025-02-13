@@ -1,6 +1,19 @@
 import React, { useState } from 'react';
-
-const ComponentPalette = ({ onComponentDrop }) => {
+import  {GripVertical,ChevronDown, ChevronUp,Pin}  from 'lucide-react';
+import SegmentedControl from './SegmentedControl';
+import Draggable from 'react-draggable'
+import { Rnd } from 'react-rnd'
+import { createPortal } from 'react-dom';
+import { useDropzone } from 'react-dropzone';
+const ComponentPalette = ({ onComponentDrop,livePreviewRef  }) => {
+  const [selectedSection, setSelectedSection] = useState('Templates');
+  const [isPinned, setIsPinned] = useState(false);
+  
+  const [localAssets, setLocalAssets] = useState(() => {
+    const savedAssets = localStorage.getItem('localAssets');
+    return savedAssets ? JSON.parse(savedAssets) : [];
+  });
+  // Tracks if the overlay is pinned
     const [components] = useState({
         headers: [
             {
@@ -122,7 +135,7 @@ const ComponentPalette = ({ onComponentDrop }) => {
                 template: `
 <div class="hero min-h-[400px] bg-base-200">
     <div class="hero-content flex-col lg:flex-row">
-        <img src="https://source.unsplash.com/random/400x400?speaker" class="max-w-sm rounded-lg shadow-2xl" alt="Speaker"/>
+        <img src="https://images.pluto.tv/channels/6675c7868768aa0008d7f1c7/featuredImage.jpg?auto=&q=70&fit=fill&fill=blur&ixlib=react-9.1.5" class="max-w-sm rounded-lg shadow-2xl" alt="Speaker"/>
         <div>
             <h1 class="text-5xl font-bold">Meet Our Speakers</h1>
             <p class="py-6">Learn from industry leaders and innovators.</p>
@@ -157,21 +170,21 @@ const ComponentPalette = ({ onComponentDrop }) => {
       template: `
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
           <div class="card bg-base-100 shadow-xl">
-            <figure><img src="https://source.unsplash.com/400x300/?event,building" alt="Feature 1"></figure>
+            <figure><img src="https://images.pluto.tv/channels/6675c7868768aa0008d7f1c7/featuredImage.jpg?auto=&q=70&fit=fill&fill=blur&ixlib=react-9.1.5" alt="Feature 1"></figure>
             <div class="card-body">
               <h2 class="card-title">Elegant Venues</h2>
               <p>Discover amazing locations to host your events.</p>
             </div>
           </div>
           <div class="card bg-base-100 shadow-xl">
-            <figure><img src="https://source.unsplash.com/400x300/?nature,landscape" alt="Feature 2"></figure>
+            <figure><img src="https://images.pluto.tv/channels/6675c7868768aa0008d7f1c7/featuredImage.jpg?auto=&q=70&fit=fill&fill=blur&ixlib=react-9.1.5" alt="Feature 2"></figure>
             <div class="card-body">
               <h2 class="card-title">Breathtaking Scenery</h2>
               <p>Capture unforgettable moments in stunning surroundings.</p>
             </div>
           </div>
           <div class="card bg-base-100 shadow-xl">
-            <figure><img src="https://source.unsplash.com/400x300/?party,event" alt="Feature 3"></figure>
+            <figure><img src="https://images.pluto.tv/channels/6675c7868768aa0008d7f1c7/featuredImage.jpg?auto=&q=70&fit=fill&fill=blur&ixlib=react-9.1.5" alt="Feature 3"></figure>
             <div class="card-body">
               <h2 class="card-title">Unforgettable Events</h2>
               <p>Organize events that leave a lasting impression.</p>
@@ -185,10 +198,10 @@ const ComponentPalette = ({ onComponentDrop }) => {
       type: 'Gallery',
       template: `
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
-          <img src="https://source.unsplash.com/400x300/?event,people" alt="Gallery Image 1" class="rounded">
-          <img src="https://source.unsplash.com/400x300/?wedding,celebration" alt="Gallery Image 2" class="rounded">
-          <img src="https://source.unsplash.com/400x300/?food,catering" alt="Gallery Image 3" class="rounded">
-          <img src="https://source.unsplash.com/400x300/?stage,performance" alt="Gallery Image 4" class="rounded">
+          <img src="/sample.png" alt="Gallery Image 1" class="rounded">
+          <img src="/sample.png" alt="Gallery Image 2" class="rounded">
+          <img src="/sample.png" alt="Gallery Image 3" class="rounded">
+          <img src="/sample.png" alt="Gallery Image 4" class="rounded">
         </div>
       `
     },
@@ -198,21 +211,21 @@ const ComponentPalette = ({ onComponentDrop }) => {
       template: `
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
           <div class="card bg-base-100 shadow-xl">
-            <figure><img src="https://source.unsplash.com/400x300/?conference,meeting" alt="Card 1"></figure>
+            <figure><img src="/sample.png" alt="Card 1"></figure>
             <div class="card-body">
               <h2 class="card-title">Professional Conferences</h2>
               <p>Host your next big meeting with ease.</p>
             </div>
           </div>
           <div class="card bg-base-100 shadow-xl">
-            <figure><img src="https://source.unsplash.com/400x300/?festival,fun" alt="Card 2"></figure>
+            <figure><img src="/sample.png" alt="Card 2"></figure>
             <div class="card-body">
               <h2 class="card-title">Festivals & Celebrations</h2>
               <p>Make every festival a memory to cherish.</p>
             </div>
           </div>
           <div class="card bg-base-100 shadow-xl">
-            <figure><img src="https://source.unsplash.com/400x300/?music,concert" alt="Card 3"></figure>
+            <figure><img src="/sample.png" alt="Card 3"></figure>
             <div class="card-body">
               <h2 class="card-title">Music Events</h2>
               <p>Bring the rhythm to life with our music events.</p>
@@ -482,7 +495,7 @@ const ComponentPalette = ({ onComponentDrop }) => {
                 id: 'product1',
                 type: 'Product Card',
                 template: `<div class="card bg-base-100 shadow-xl">
-                    <figure><img src="https://placehold.co/400x300" alt="Product"/></figure>
+                    <figure><img src="/sample.png" alt="Product"/></figure>
                     <div class="card-body">
                         <h2 class="card-title">Product Name</h2>
                         <p>Product description goes here.</p>
@@ -496,10 +509,28 @@ const ComponentPalette = ({ onComponentDrop }) => {
         ],
 
         
-
-
-        
     });
+    const predefinedAssets = [
+      { id: 'asset-1', type: 'Image', src: '/path/to/predefined-image.jpg' },
+      { id: 'asset-2', type: 'Video', src: '/path/to/predefined-video.mp4' },
+     ];
+    const templates = [
+      {
+        id: 'landing-template',
+        name: 'Landing Page',
+        description: 'A complete landing page with hero, features, and CTA',
+        preview: 'https://source.unsplash.com/400x300/?website',
+        components: ['header1', 'hero1', 'body1', 'contact1', 'footer1']
+      },
+      {
+        id: 'event-template',
+        name: 'Event Page',
+        description: 'Perfect for conferences and meetups',
+        preview: 'https://source.unsplash.com/400x300/?event',
+        components: ['header2', 'hero2', 'body5', 'contact2', 'footer2']
+      }
+    ];
+
     const handleDragStart = (e, component) => {
         e.dataTransfer.setData('component', JSON.stringify(component));
         onComponentDrop(component);
@@ -507,32 +538,193 @@ const ComponentPalette = ({ onComponentDrop }) => {
     // const handleComponentClick = (component) => {
     //     onComponentDrop(component);
     // };
-    return (
-        <div className="p-4 space-y-8">
-            {Object.entries(components).map(([category, items]) => (
-                <div key={category} className="space-y-4">
-                <h3 className="text-lg font-bold capitalize sticky top-0 bg-base-200 py-2">
-                    {category}
-                </h3>
-                <div className="flex space-x-4 overflow-x-auto pb-4">
-                    {items.map((comp) => (
-                        <div
-                            key={comp.id}
-                            className="p-4 border rounded-lg cursor-move bg-base-100 hover:bg-base-200 
-                                     transition-all hover:shadow-lg hover:-translate-y-1 min-w-[200px]"
-                            draggable
-                            onDragStart={(e) => handleDragStart(e, comp)}
-                           
-                        >
-                            <div className="font-medium mb-2">{comp.type}</div>
-                            <div className="text-sm opacity-70">Click to add or drag</div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            ))}
-        </div>
-    );
-};
 
-export default ComponentPalette;
+    const [activeOverlay, setActiveOverlay] = useState(null); // Tracks the active overlay
+
+    const handlePinToggle = () => {
+      setIsPinned(!isPinned);
+    };
+  const handleOverlayToggle = (category) => {
+    setActiveOverlay(activeOverlay === category ? null : category);
+  };
+
+
+  const handleDrop = (files) => {
+    const uploadedAssets = files.map((file) => {
+      const url = URL.createObjectURL(file);
+      return { id: `local-${Date.now()}`, type: file.type.split('/')[0], src: url };
+    });
+    const updatedAssets = [...localAssets, ...uploadedAssets];
+    setLocalAssets(updatedAssets);
+    localStorage.setItem('localAssets', JSON.stringify(updatedAssets));
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop: handleDrop });
+const renderOverlay = (category, items) => {
+  const overlayContent = (
+    <Rnd
+      default={{
+        x: livePreviewRef.current.offsetWidth - 320,
+        y: window.innerHeight / 4,
+        width: 300,
+        height: window.innerHeight / 2,
+      }}
+      bounds="parent"
+      enableResizing={false}
+      disableDragging={isPinned}
+      className="z-50 bg-base-100 shadow-lg p-4 overflow-y-auto border-2 border-base-content/10 rounded-3xl"
+      style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', scrollbarWidth: 'none' }}
+    >
+      <div className="overlay-header flex justify-between items-center mb-4 sticky top-0 bg-base-100 z-50">
+        <button 
+          className="btn btn-sm btn-primary"
+          onClick={() => handleOverlayToggle(category)}
+        >
+          Close
+        </button>
+        <button 
+          className={`btn btn-sm ${isPinned ? 'btn-secondary' : 'btn-primary'}`}
+          onClick={handlePinToggle}
+        >
+          <Pin />
+        </button>
+      </div>
+      {items.map((comp) => (
+        <div
+          key={comp.id}
+          draggable
+          onDragStart={(e) => handleDragStart(e, comp)}
+          className="flex flex-col items-center gap-3 p-3 bg-base-200 rounded-lg mb-4"
+        >
+          <div className="bg-base-300 p-2 rounded-lg">
+            <img src="https://static.wixstatic.com/media/72c0b2_4b28e59db27945fab192808be7ce5f18~mv2.jpg/v1/fill/w_1000,h_571,al_c,q_85,usm_0.66_1.00_0.01/72c0b2_4b28e59db27945fab192808be7ce5f18~mv2.jpg" alt={comp.type} className="w-24 h-16 object-cover rounded-lg" />
+          </div>
+          <span className="text-sm">{comp.type}</span>
+        </div>
+      ))}
+    </Rnd>
+  );
+
+  return createPortal(overlayContent, livePreviewRef.current);
+};
+    const renderContent = () => {
+      switch (selectedSection) {
+        case 'Templates':
+          return (
+            <div className="grid grid-cols-1 gap-4 p-4">
+              {templates.map((template) => (
+                <div
+                  key={template.id}
+                  className="group relative bg-base-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all"
+                >
+                  <img 
+                    src={template.preview} 
+                    alt={template.name}
+                    className="w-full h-40 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="font-medium text-base-content">{template.name}</h3>
+                    <p className="text-sm text-base-content/70 mt-1">{template.description}</p>
+                  </div>
+                  <button className="opacity-0 group-hover:opacity-100 absolute top-2 right-2 btn btn-sm btn-primary">
+                    Use Template
+                  </button>
+                </div>
+              ))}
+            </div>
+          );
+        
+        case 'Pages':
+          
+        return (
+          <div className="space-y-6 p-4">
+            {Object.entries(components).map(([category, items]) => (
+              <div key={category} className="relative">
+                <div 
+                  className="flex items-center justify-between cursor-pointer"
+                  onClick={() => handleOverlayToggle(category)}
+                >
+                  <h3 className="text-sm font-medium text-base-content/70 uppercase tracking-wider">
+                    {category}
+                  </h3>
+                  {activeOverlay === category ? <ChevronUp /> : <ChevronDown />}
+                </div>
+                {activeOverlay === category && renderOverlay(category, items)}
+              </div>
+            ))}
+          </div>
+        );
+        
+          case 'Assets':
+            
+        return (
+          <div className="space-y-6 p-4">
+            <h3 className="text-sm font-medium text-base-content/70 uppercase tracking-wider">Predefined Assets</h3>
+            {predefinedAssets.map((asset) => (
+              <div
+                key={asset.id}
+                draggable
+                onDragStart={(e) => handleDragStart(e, asset)}
+                className="flex items-center gap-3 p-3 bg-base-100 rounded-lg hover:bg-base-200 cursor-move group"
+              >
+                <div className="bg-base-300 p-2 rounded-lg">
+                  {asset.type === 'Image' && (
+                    <img src={asset.src} alt={asset.type} className="w-24 h-16 object-cover rounded-lg" />
+                  )}
+                  {asset.type === 'Video' && (
+                    <video src={asset.src} className="w-24 h-16 object-cover rounded-lg" controls />
+                  )}
+                </div>
+                <span className="text-sm">{asset.type}</span>
+              </div>
+            ))}
+            <h3 className="text-sm font-medium text-base-content/70 uppercase tracking-wider">Local Assets</h3>
+            {localAssets.map((asset) => (
+              <div
+                key={asset.id}
+                draggable
+                onDragStart={(e) => handleDragStart(e, asset)}
+                className="flex items-center gap-3 p-3 bg-base-100 rounded-lg hover:bg-base-200 cursor-move group"
+              >
+                <div className="bg-base-300 p-2 rounded-lg">
+                  {asset.type === 'Image' && (
+                    <img src={asset.src} alt={asset.type} className="w-24 h-16 object-cover rounded-lg" />
+                  )}
+                  {asset.type === 'Video' && (
+                    <video src={asset.src} className="w-24 h-16 object-cover rounded-lg" controls />
+                  )}
+                </div>
+                <span className="text-sm">{asset.type}</span>
+              </div>
+            ))}
+            <div {...getRootProps()} className="mt-4 p-4 bg-base-200 rounded-lg cursor-pointer hover:bg-base-300">
+              <input {...getInputProps()} />
+              <p>Drag & drop files here, or click to select files</p>
+            </div>
+          </div>
+        );
+
+      
+
+        default:
+            return null;
+    
+      }
+    };
+  
+    return (
+      <div className="flex flex-col h-full">
+        <div className="p-4">
+          <SegmentedControl 
+            selected={selectedSection} 
+            onSelect={setSelectedSection} 
+          />
+        </div>
+        <div className="flex-1 overflow-y-auto">
+          {renderContent()}
+        </div>
+      </div>
+    );
+  };
+  
+  export default ComponentPalette;

@@ -6,7 +6,7 @@ import ComponentPalette from './ComponentPalette';
 import LivePreview from './LivePreview';
 import CustomizationPanel from './CustomizationPanel';
 
-import 'daisyui/dist/full.css'; // Include DaisyUI styles
+// Include DaisyUI styles
 import CanvasEditor from './CanvasEditor';
 
 const WebsiteBuilder = () => {

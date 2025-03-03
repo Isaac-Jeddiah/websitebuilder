@@ -1,6 +1,6 @@
 import React, { useState,useEffect,useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiSearch, FiX } from 'react-icons';
+import { FiSearch, FiX } from 'react-icons/fi';
 
 const CustomizationPanel = ({ component, onEdit,onComponentEdit, onDelete }) => {
     const [activeTab, setActiveTab] = useState('typography');

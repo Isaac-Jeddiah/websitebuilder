@@ -1,6 +1,6 @@
 import React, { useState,useEffect,useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiSearch, FiX } from 'react-icons/fi';
+import { FiSearch, FiX } from 'react-icons';
 
 const CustomizationPanel = ({ component, onEdit,onComponentEdit, onDelete }) => {
     const [activeTab, setActiveTab] = useState('typography');
@@ -134,44 +134,52 @@ const CustomizationPanel = ({ component, onEdit,onComponentEdit, onDelete }) => 
         return textMap;
     };
 
-     // Handle text change for a specific component
-  const handleTextChange = (key, value) => {
-    updatingRef.current = true;
-    
-    try {
-      // Update local state
-      const updatedTextMap = { ...componentTextMap, [key]: value };
-      setComponentTextMap(updatedTextMap);
-      
-      // Find the original text to replace
-      const originalText = componentTextMap[key];
-      
-      if (!originalText) {
-        console.warn('Could not find original text to replace');
-        return;
-      }
-      
-      // Create a precise regex to target the specific text
-      const regex = new RegExp(`(<[^>]*>)([^<]*${escapeRegExp(originalText)}[^<]*)(<[^>]*>)`, 'g');
-      const newContent = `$1${value}$3`;
-      
-      // Update the template
-      let updatedTemplate = component.template.replace(regex, newContent);
-      
-      // Fallback if no replacement was made
-      if (updatedTemplate === component.template) {
-        updatedTemplate = component.template.replace(originalText, value);
-      }
-      
-      // Call parent component's update function
-      onComponentEdit(component.id, { template: updatedTemplate });
-    } finally {
-      // Reset updating flag
-      setTimeout(() => {
-        updatingRef.current = false;
-      }, 300);
-    }
-  };
+    const handleTextChange = (key, value) => {
+        // Set the updating flag to prevent immediate re-extraction
+        updatingRef.current = true;
+        
+        try {
+            // Update local state first
+            const updatedTextMap = { ...componentTextMap, [key]: value };
+            setComponentTextMap(updatedTextMap);
+            
+            // Get the original text that needs to be replaced
+            const originalText = component.template.includes(componentTextMap[key])
+                ? componentTextMap[key]
+                : '';
+                
+            if (!originalText) {
+                console.warn('Could not find original text to replace');
+                return;
+            }
+            
+            // Update the component's template with new text content
+            let updatedTemplate = component.template;
+            
+            // Create a more precise regex to target only the specific text
+            const regex = new RegExp(`(<[^>]*>)([^<]*${escapeRegExp(originalText)}[^<]*)(<[^>]*>)`, 'g');
+            const newContent = `$1${value}$3`;
+            
+            updatedTemplate = updatedTemplate.replace(regex, newContent);
+            
+            // If no replacement was made, try a simpler approach
+            if (updatedTemplate === component.template) {
+                // Fallback to direct replacement
+                updatedTemplate = component.template.replace(
+                    originalText,
+                    value
+                );
+            }
+            
+            // Call the parent component's update function
+            onComponentEdit(component.id, { template: updatedTemplate });
+        } finally {
+            // Reset updating flag after a short delay
+            setTimeout(() => {
+                updatingRef.current = false;
+            }, 300);
+        }
+    };
 
     const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -512,49 +520,23 @@ const CustomizationPanel = ({ component, onEdit,onComponentEdit, onDelete }) => 
             </div>
 
             {/* Enhanced tabs with animations */}
-            <div className="p-4">
-      <div 
-        className="bg-gray-100 rounded-full p-2 overflow-x-auto no-scrollbar shadow-md"
-        style={{ 
-          width: '400px', 
-          maxWidth: '100%',
-          scrollbarWidth: 'none', 
-          msOverflowStyle: 'none' 
-        }}
-      >
-        <div className="flex space-x-2">
-          {tabs.map((tab) => (
-            <motion.button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`
-                px-4 py-2 rounded-full transition-all duration-300 ease-in-out
-                text-sm font-medium whitespace-nowrap
-                focus:outline-none
-              `}
-              style={{
-                backgroundColor: activeTab === tab.id 
-                  ? tab.color 
-                  : 'transparent',
-                color: activeTab === tab.id 
-                  ? 'white' 
-                  : 'rgba(0,0,0,0.7)',
-              }}
-              whileHover={{ 
-                scale: 1.05,
-                transition: { duration: 0.2 }
-              }}
-              whileTap={{ 
-                scale: 0.95,
-                transition: { duration: 0.2 }
-              }}
-            >
-              {tab.label}
-            </motion.button>
-          ))}
-        </div>
-      </div>
-    </div>
+            <div className="tabs tabs-boxed mb-4 overflow-x-auto custom-scrollbar">
+                {tabs.map(tab => (
+                    <motion.button
+                        key={tab.id}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`tab min-w-[100px] ${activeTab === tab.id ? 'tab-active' : ''}`}
+                        style={{
+                            backgroundColor: activeTab === tab.id ? tab.color : 'transparent',
+                            color: activeTab === tab.id ? 'white' : 'inherit'
+                        }}
+                        onClick={() => setActiveTab(tab.id)}
+                    >
+                        {tab.label}
+                    </motion.button>
+                ))}
+            </div>
         {/* Search Results Overlay */}
        
             <div className="overflow-y-auto max-h-[calc(100vh-200px)] custom-scrollbar">

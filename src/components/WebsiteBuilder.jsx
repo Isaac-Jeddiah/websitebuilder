@@ -7,6 +7,7 @@ import LivePreview from './LivePreview';
 import CustomizationPanel from './CustomizationPanel';
 
 import 'daisyui/dist/full.css'; // Include DaisyUI styles
+import CanvasEditor from './CanvasEditor';
 
 const WebsiteBuilder = () => {
     const [selectedTheme, setSelectedTheme] = useState('light');
@@ -114,7 +115,8 @@ const WebsiteBuilder = () => {
                     onComponentClick={setActiveComponent} 
                     onDeleteComponent={handleDeleteComponent}
                     onComponentEdit={handleComponentEdit} 
-                    onReorderComponents={handleReorderComponents} />
+                    onReorderComponents={handleReorderComponents} /> 
+                    {/* <CanvasEditor/> */}
             </div>
 
             {/* Right Panel: Customization Options */}

@@ -510,10 +510,36 @@ const ComponentPalette = ({ onComponentDrop,livePreviewRef  }) => {
 
         
     });
+    //assets want to develop and put it in here
     const predefinedAssets = [
-      { id: 'asset-1', type: 'Image', src: '/path/to/predefined-image.jpg' },
-      { id: 'asset-2', type: 'Video', src: '/path/to/predefined-video.mp4' },
-     ];
+      { 
+        id: 'asset-1', 
+        type: 'Image', 
+        src: '/path/to/predefined-image.jpg',
+        template: `<img src="/path/to/predefined-image.jpg" alt="Predefined Image" />`
+      },
+      { 
+        id: 'asset-2', 
+        type: 'Video', 
+        src: '/path/to/predefined-video.mp4',
+        template: `<video src="/path/to/predefined-video.mp4" controls></video>`
+      },
+      { 
+        id: 'asset-3', 
+        type: 'Custom', 
+        src: '/path/to/predefined-thumbnail.jpg',
+        template: `
+          <div class="custom-3d-block">
+            <!-- HTML content for 3D block -->
+          </div>
+          <style>
+            /* CSS content for 3D block */
+          </style>
+          <script>
+            // JavaScript content for 3D block
+          </script>
+        `
+      }];
     const templates = [
       {
         id: 'landing-template',
@@ -531,10 +557,7 @@ const ComponentPalette = ({ onComponentDrop,livePreviewRef  }) => {
       }
     ];
 
-    const handleDragStart = (e, component) => {
-        e.dataTransfer.setData('component', JSON.stringify(component));
-        onComponentDrop(component);
-    };
+    
     // const handleComponentClick = (component) => {
     //     onComponentDrop(component);
     // };
@@ -552,7 +575,15 @@ const ComponentPalette = ({ onComponentDrop,livePreviewRef  }) => {
   const handleDrop = (files) => {
     const uploadedAssets = files.map((file) => {
       const url = URL.createObjectURL(file);
-      return { id: `local-${Date.now()}`, type: file.type.split('/')[0], src: url };
+      const newComponent = {
+        id: `${file.type.split('/')[0]}-${Date.now()}`,
+        type: 'asset',
+        src: url,
+        template: file.type.split('/')[0] === 'image'
+          ? `<img src="${url}" alt="Uploaded Image" />`
+          : `<video src="${url}" controls></video>`
+      };
+      return newComponent;
     });
     const updatedAssets = [...localAssets, ...uploadedAssets];
     setLocalAssets(updatedAssets);
@@ -560,6 +591,10 @@ const ComponentPalette = ({ onComponentDrop,livePreviewRef  }) => {
   };
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop: handleDrop });
+  const handleDragStart = (e, component) => {
+    e.dataTransfer.setData('component', JSON.stringify(component));
+    onComponentDrop(component);
+};
 const renderOverlay = (category, items) => {
   const overlayContent = (
     <Rnd

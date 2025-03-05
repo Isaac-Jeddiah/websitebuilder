@@ -69,6 +69,7 @@ const LivePreview = ({ components, onComponentClick, onComponentSelect, theme, o
                         <div className="space-y-4 p-4">
                             {components.map((comp, index) => (
                                 <DraggableComponent
+                                
                                     key={comp.id}
                                     component={comp}
                                     index={index}

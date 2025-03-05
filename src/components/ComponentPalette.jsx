@@ -16,16 +16,19 @@ const ComponentPalette = ({ onComponentDrop,livePreviewRef  }) => {
   // Tracks if the overlay is pinned
     const [components] = useState({
         headers: [
-            {
-                id: 'header1',
-                type: 'Event Logo Header',
-                template: `
+          {
+            id: 'header1',
+            type: 'Event Logo Header',
+            template: `
 <header class="navbar bg-base-100">
     <div class="flex-1">
-        <a class="btn btn-ghost text-xl">EventName</a>
+        <a class="btn btn-ghost text-xl" data-edit-key="eventName">EventName</a>
     </div>
-</header>`
-            },
+</header>`,
+            editableTexts: {
+                eventName: 'EventName'
+            }
+        },
             {
                 id: 'header2',
                 type: 'Nav Header with Event Details',
@@ -563,7 +566,7 @@ const ComponentPalette = ({ onComponentDrop,livePreviewRef  }) => {
     // };
 
     const [activeOverlay, setActiveOverlay] = useState(null); // Tracks the active overlay
-
+{/**handle pin for  */}
     const handlePinToggle = () => {
       setIsPinned(!isPinned);
     };
@@ -571,7 +574,7 @@ const ComponentPalette = ({ onComponentDrop,livePreviewRef  }) => {
     setActiveOverlay(activeOverlay === category ? null : category);
   };
 
-
+{/**handle drop files for assets */}
   const handleDrop = (files) => {
     const uploadedAssets = files.map((file) => {
       const url = URL.createObjectURL(file);
@@ -589,12 +592,13 @@ const ComponentPalette = ({ onComponentDrop,livePreviewRef  }) => {
     setLocalAssets(updatedAssets);
     localStorage.setItem('localAssets', JSON.stringify(updatedAssets));
   };
-
+{/**convert assets to components */}
   const { getRootProps, getInputProps } = useDropzone({ onDrop: handleDrop });
   const handleDragStart = (e, component) => {
     e.dataTransfer.setData('component', JSON.stringify(component));
     onComponentDrop(component);
 };
+{/**render overlay for components selection*/}
 const renderOverlay = (category, items) => {
   const overlayContent = (
     <Rnd
@@ -624,6 +628,7 @@ const renderOverlay = (category, items) => {
           <Pin />
         </button>
       </div>
+      {/**my predefined components in a list */}
       {items.map((comp) => (
         <div
           key={comp.id}
@@ -639,11 +644,13 @@ const renderOverlay = (category, items) => {
       ))}
     </Rnd>
   );
-
+{/**create portal package used for internal backend to transfer files or data between components */}
   return createPortal(overlayContent, livePreviewRef.current);
 };
+
     const renderContent = () => {
       switch (selectedSection) {
+      /**update the template in js function to show components as group */
         case 'Templates':
           return (
             <div className="grid grid-cols-1 gap-4 p-4">

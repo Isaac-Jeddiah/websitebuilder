@@ -1,0 +1,113 @@
+.canvas-container {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    background: #0c0202;
+  }
+  
+  .canvas-content {
+    position: relative;
+    min-height: 100%;
+    background: rgb(234, 233, 235);
+    transform-origin: center center;
+  }
+  
+  .overlay-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(159, 211, 230, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(249, 246, 246, 0.1);
+  }
+  
+  .control-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    background: #13030f;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .control-btn:hover {
+    background: #0a0308;
+  }
+  
+  .element {
+    position: relative;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #92630b;
+  }
+  
+  .element.editable {
+    cursor: pointer;
+    border: 1px dashed #332e2e;
+  }
+  
+  .element.editable:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  .sidebar {
+    width: 250px;
+    padding: 20px;
+    background: #1c5185;
+    border-right: 1px solid #6b6e70;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .component-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .view-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .component-tree {
+    flex: 1;
+    overflow-y: auto;
+  }
+  
+  .tree-item {
+    padding: 8px;
+    margin: 4px 0;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .tree-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+  .tree-item.selected {
+    background: #aa4949;
+  }
+  
+.tree-item.selected button {
+    color: white;
+    border-color: white;
+  }
+  .tree-children {
+    margin-left: 20px;
+    border-left: 1px solid #dddf65;
+  }
+  
+  .tree-item button {
+    margin-left: 10px;
+    padding: 2px 5px;
+    font-size: 0.8em;
+  }

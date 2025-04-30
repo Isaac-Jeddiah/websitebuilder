@@ -1,0 +1,83 @@
+.canvas-container {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    background: #190202;
+  }
+  
+  .canvas-content {
+    position: relative;
+    min-height: 100%;
+    background: rgb(220, 214, 214);
+    transform-origin: center center;
+  }
+  
+  .overlay-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(224, 217, 217, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .control-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    background: #090202;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .control-btn:hover {
+    background: #f0f0f0;
+  }
+  
+  .element {
+    position: relative;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  .element.editable {
+    cursor: pointer;
+    border: 1px dashed #666;
+  }
+  
+  .element.editable:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+  .element-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #666;
+    font-size: inherit;
+    font-family: inherit;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    outline: none;
+    color: inherit;
+  }
+  .element.selected {
+    border-color: #2196f3;
+    background-color: rgba(33, 150, 243, 0.1);
+  }
+  
+  .element.editable {
+    cursor: text;
+    border: 1px dashed #666;
+  }
+  
+  .element.editable:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }

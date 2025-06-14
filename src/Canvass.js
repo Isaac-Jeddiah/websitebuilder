@@ -99,12 +99,12 @@ const Canvas = ({
     return (
       <div
         ref={canvasRef}
-        className="canvas-container bg-gray-100 p-8 min-h-screen"
+        className="canvas-container bg-gray-100 gap-10 p-8 min-h-screen"
         onMouseDown={!editMode ? onMouseDown : undefined}
         onMouseMove={!editMode ? onMouseMove : undefined}
         onMouseUp={!editMode ? onMouseUp : undefined}
       >
-        <div className="flex justify-center">
+        <div className="flex justify-center gap-10">
           {/* Web View */}
           <div className="flex flex-col items-center">
             

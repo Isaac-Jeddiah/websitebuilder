@@ -101,7 +101,7 @@ const WebsiteBuilder = () => {
             {/* Left Sidebar */}
             <div className="w-full md:w-80 h-full overflow-y-auto border-r border-base-300">
                 <div className="sticky top-0 bg-base-200 p-4 border-b border-base-300">
-                    <ThemeSelector onThemeChange={handleThemeChange} />
+                    {/* <ThemeSelector onThemeChange={handleThemeChange} /> */}
                 </div>
                 <ComponentPalette onComponentDrop={handleComponentDrop}  livePreviewRef={livePreviewRef} />
             </div>

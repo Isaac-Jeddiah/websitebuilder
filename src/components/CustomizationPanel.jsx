@@ -205,37 +205,7 @@ const CustomizationPanel = ({ component, onEdit,onComponentEdit, onDelete }) => 
             animate={{ opacity: 1 }}
             className="space-y-4 p-4 rounded-lg bg-base-200"
         >
-            <div className="space-y-4">
-                {Object.keys(componentTextMap).map((key) => (
-                    <div key={key} className="mb-6 bg-white rounded-lg p-4 shadow-sm">
-                        <label className="block font-medium mb-2">Edit Text Content {key}</label>
-                        
-                        {editMode === key ? (
-                            <div className="relative">
-                                <textarea
-                                    className="textarea textarea-bordered w-full min-h-[100px] font-normal"
-                                    value={editValue}
-                                    onChange={(e) => setEditValue(e.target.value)}
-                                    onBlur={() => saveEdit(key)}
-                                    onKeyDown={(e) => handleKeyDown(e, key)}
-                                    autoFocus
-                                    placeholder="Enter component text..."
-                                />
-                                <div className="mt-2 text-xs text-gray-500">
-                                    Press Enter to save or click outside to apply changes
-                                </div>
-                            </div>
-                        ) : (
-                            <div 
-                                className="p-3 border rounded min-h-[100px] cursor-pointer hover:bg-gray-50"
-                                onClick={() => startEditing(key)}
-                            >
-                                {componentTextMap[key]}
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </div>
+            
 
             <div>
                 <label className="block font-medium mb-2">Font Family</label>

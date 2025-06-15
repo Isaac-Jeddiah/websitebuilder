@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRef,useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -6,7 +7,12 @@ import WebsitePublisher from './WebsitePublisher';
 
 const LivePreview = ({ components, onComponentClick, onComponentSelect, theme, onDeleteComponent, onReorderComponents }) => {
     const navigate = useNavigate();
-
+    const containerRef = useRef(null);
+    const innerRef = useRef(null);
+    const [isPanning, setIsPanning] = useState(false);
+    const [origin, setOrigin] = useState({ x: 0, y: 0 });
+    const [translate, setTranslate] = useState({ x: 0, y: 0 });
+    const [zoom, setZoom] = useState(1)
     const handleSaveAndPreview = () => {
         const websiteData = {
             components,
@@ -33,6 +39,26 @@ const LivePreview = ({ components, onComponentClick, onComponentSelect, theme, o
     const handleDragLeave = (e) => {
         e.preventDefault();
     };
+    
+   
+    const startPan = (e) => {
+        setIsPanning(true);
+        setOrigin({ x: e.clientX - translate.x, y: e.clientY - translate.y });
+    };
+
+    const stopPan = () => {
+        setIsPanning(false);
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isPanning) return;
+        setTranslate({
+            x: e.clientX - origin.x,
+            y: e.clientY - origin.y
+        });
+    };
+
+   
 
     return (
         <div className="min-h-full p-4 bg-base-300">
@@ -54,6 +80,7 @@ const LivePreview = ({ components, onComponentClick, onComponentSelect, theme, o
                     />
                 </div>
             </div>
+            <div>
             <DndProvider backend={HTML5Backend}>
                 <div
                     className="w-full max-w-4xl mx-auto bg-base-100 min-h-screen shadow-xl rounded-lg"
@@ -83,6 +110,7 @@ const LivePreview = ({ components, onComponentClick, onComponentSelect, theme, o
                     )}
                 </div>
             </DndProvider>
+            </div>
         </div>
     );
 };

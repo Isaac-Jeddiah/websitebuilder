@@ -518,44 +518,45 @@ const ComponentPalette = ({ onComponentDrop,livePreviewRef  }) => {
       { 
         id: 'asset-1', 
         type: 'Image', 
-        src: '/path/to/predefined-image.jpg',
-        template: `<img src="/path/to/predefined-image.jpg" alt="Predefined Image" />`
+        src: 'https://tse2.mm.bing.net/th?id=OIP.B39-1EvwOFXOffOfIKZT0AHaEK&pid=Api&P=0&h=180',
+        template: `<img src="https://tse2.mm.bing.net/th?id=OIP.B39-1EvwOFXOffOfIKZT0AHaEK&pid=Api&P=0&h=180" alt="Predefined Image" />`
       },
       { 
         id: 'asset-2', 
         type: 'Video', 
-        src: '/path/to/predefined-video.mp4',
-        template: `<video src="/path/to/predefined-video.mp4" controls></video>`
+        src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        template: `<video src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" controls></video>`
       },
-      { 
-        id: 'asset-3', 
-        type: 'Custom', 
-        src: '/path/to/predefined-thumbnail.jpg',
-        template: `
-          <div class="custom-3d-block">
-            <!-- HTML content for 3D block -->
-          </div>
-          <style>
-            /* CSS content for 3D block */
-          </style>
-          <script>
-            // JavaScript content for 3D block
-          </script>
-        `
-      }];
+      // { 
+      //   id: 'asset-3', 
+      //   type: 'Custom', 
+      //   src: 'https://tse2.mm.bing.net/th?id=OIP.B39-1EvwOFXOffOfIKZT0AHaEK&pid=Api&P=0&h=180',
+      //   template: `
+      //     <div class="custom-3d-block">
+      //       <!-- HTML content for 3D block -->
+      //     </div>
+      //     <style>
+      //       /* CSS content for 3D block */
+      //     </style>
+      //     <script>
+      //       // JavaScript content for 3D block
+      //     </script>
+      //   `
+      // }
+      ];
     const templates = [
       {
         id: 'landing-template',
         name: 'Landing Page',
         description: 'A complete landing page with hero, features, and CTA',
-        preview: 'https://source.unsplash.com/400x300/?website',
+        preview: 'https://tse4.mm.bing.net/th?id=OIP.YNoM71xaLB3sxbQHc4RCYAHaFs&pid=Api&P=0&h=180',
         components: ['header1', 'hero1', 'body1', 'contact1', 'footer1']
       },
       {
         id: 'event-template',
         name: 'Event Page',
         description: 'Perfect for conferences and meetups',
-        preview: 'https://source.unsplash.com/400x300/?event',
+        preview: 'https://tse4.mm.bing.net/th?id=OIP.YNoM71xaLB3sxbQHc4RCYAHaFs&pid=Api&P=0&h=180',
         components: ['header2', 'hero2', 'body5', 'contact2', 'footer2']
       }
     ];
@@ -603,30 +604,32 @@ const renderOverlay = (category, items) => {
   const overlayContent = (
     <Rnd
       default={{
-        x: livePreviewRef.current.offsetWidth - 320,
-        y: window.innerHeight / 4,
+        y:1250,
         width: 300,
-        height: window.innerHeight / 2,
+        height: window.innerHeight / 1.5,
       }}
-      bounds="parent"
+      
       enableResizing={false}
-      disableDragging={isPinned}
-      className="z-50 bg-base-100 shadow-lg p-4 overflow-y-auto border-2 border-base-content/10 rounded-3xl"
-      style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', scrollbarWidth: 'none' }}
+      disableDragging={true}
+      className="sticky z-50 bg-base-100 shadow-lg p-4 overflow-y-auto border-2 border-base-content/10 rounded-3xl"
+      style={{ backgroundColor: 'rgba(81, 80, 162, 0.9)', scrollbarWidth: 'none' }}
     >
-      <div className="overlay-header flex justify-between items-center mb-4 sticky top-0 bg-base-100 z-50">
+      <div 
+          style={{backgroundColor:'rgba(81, 80, 162, 0.9)',}} className=" mb-4 sticky top-0 z-50">
         <button 
-          className="btn btn-sm btn-primary"
+          className="btn btn-sm btn-primary "
+          
+          style={{backgroundColor:'rgba(235, 44, 44, 0.9)',}}
           onClick={() => handleOverlayToggle(category)}
         >
           Close
         </button>
-        <button 
+        {/* <button 
           className={`btn btn-sm ${isPinned ? 'btn-secondary' : 'btn-primary'}`}
           onClick={handlePinToggle}
         >
           <Pin />
-        </button>
+        </button> */}
       </div>
       {/**my predefined components in a list */}
       {items.map((comp) => (
@@ -634,6 +637,7 @@ const renderOverlay = (category, items) => {
           key={comp.id}
           draggable
           onDragStart={(e) => handleDragStart(e, comp)}
+          onClick={() => onComponentDrop(comp)}
           className="flex flex-col items-center gap-3 p-3 bg-base-200 rounded-lg mb-4"
         >
           <div className="bg-base-300 p-2 rounded-lg">
@@ -668,7 +672,7 @@ const renderOverlay = (category, items) => {
                     <h3 className="font-medium text-base-content">{template.name}</h3>
                     <p className="text-sm text-base-content/70 mt-1">{template.description}</p>
                   </div>
-                  <button className="opacity-0 group-hover:opacity-100 absolute top-2 right-2 btn btn-sm btn-primary">
+                  <button  className="opacity-0 group-hover:opacity-100 absolute top-2 right-2 btn btn-sm btn-primary">
                     Use Template
                   </button>
                 </div>
